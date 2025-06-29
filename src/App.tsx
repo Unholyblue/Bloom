@@ -163,11 +163,6 @@ function App() {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      
-      // Auto-close sidebar on mobile when resizing to desktop
-      if (!mobile && isPanelOpen) {
-        setIsPanelOpen(false);
-      }
     };
 
     // Set initial state
@@ -175,7 +170,7 @@ function App() {
     
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isPanelOpen]);
+  }, []);
 
   // Handle click outside sidebar to close it (for mobile)
   useEffect(() => {
