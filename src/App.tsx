@@ -235,7 +235,12 @@ function App() {
   };
 
   const createNewSession = () => {
-    // Allow creating a new session without authentication
+    // Check if user is authenticated before creating a new session
+    if (!authState.user) {
+      setShowAuthModal(true);
+      return;
+    }
+
     setIsLoading(true);
     setLoadingMessage('Creating new conversation...');
 
@@ -270,8 +275,6 @@ function App() {
       setIsLoading(false);
       setLoadingMessage('');
     }, 800);
-    
-    return;
   };
 
   const selectSession = (sessionId: string) => {
