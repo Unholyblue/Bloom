@@ -163,6 +163,11 @@ function App() {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
+      
+      // Auto-close sidebar on mobile when resizing to desktop
+      if (!mobile && isPanelOpen) {
+        setIsPanelOpen(false);
+      }
     };
 
     // Set initial state
@@ -170,7 +175,7 @@ function App() {
     
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [isPanelOpen]);
 
   // Handle click outside sidebar to close it (for mobile)
   useEffect(() => {
@@ -244,12 +249,6 @@ function App() {
   };
 
   const createNewSession = () => {
-    // Check if user is authenticated before creating a new session
-    if (!authState.user) {
-      setShowAuthModal(true);
-      return;
-    }
-
     setIsLoading(true);
     setLoadingMessage('Creating new conversation...');
 
@@ -789,7 +788,7 @@ function App() {
         {/* Panel Toggle Button */}
         <button
           onClick={togglePanel}
-          className="fixed top-6 left-6 z-30 p-3 bg-white/80 hover:bg-white/90 border border-white/20 hover:border-white/40 rounded-full shadow-gentle hover:shadow-calm flex items-center justify-center text-therapy-gray-600 hover:text-soft-blue-600 hover:scale-105 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-soft-blue-300"
+          className="fixed top-6 left-6 z-30 p-3 bg-white/80 hover:bg-white/90 border border-white/20 hover:border-white/40 rounded-xl shadow-gentle hover:shadow-calm flex items-center justify-center text-therapy-gray-600 hover:text-soft-blue-600 hover:scale-105 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-soft-blue-300"
           title={isPanelOpen ? 'Close navigation panel (Ctrl+/)' : 'Open navigation panel (Ctrl+/)'}
           aria-label={isPanelOpen ? 'Close navigation panel' : 'Open navigation panel'}
           aria-expanded={isPanelOpen}
