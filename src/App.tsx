@@ -71,6 +71,7 @@ function App() {
   const [autoPlayVoice, setAutoPlayVoice] = useState(false);
   
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   
   // Subscribe to auth state changes
   useEffect(() => {
@@ -174,6 +175,19 @@ function App() {
     
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, [isPanelOpen]);
+
+  // Handle click outside sidebar to close it (for mobile)
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Close sidebar when clicking on the overlay
+      if (isPanelOpen && overlayRef.current && overlayRef.current.contains(event.target as Node)) {
+        setIsPanelOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isPanelOpen]);
 
   // Check if user is new (first time visiting) - only for non-authenticated users
@@ -745,8 +759,8 @@ function App() {
         {/* Backdrop for Sidebar Overlay */}
         {isPanelOpen && (
           <div 
+            ref={overlayRef}
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
-            onClick={() => setIsPanelOpen(false)}
             aria-hidden="true"
           />
         )}
