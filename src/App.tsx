@@ -758,6 +758,7 @@ function App() {
             ref={overlayRef}
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
             aria-hidden="true"
+            onClick={() => setIsPanelOpen(false)}
           />
         )}
 
