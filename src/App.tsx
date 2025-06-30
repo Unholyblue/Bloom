@@ -70,9 +70,6 @@ function App() {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [autoPlayVoice, setAutoPlayVoice] = useState(false);
   
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  
   // Subscribe to auth state changes
   useEffect(() => {
     const unsubscribe = authService.subscribe((state) => {
@@ -177,19 +174,6 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, [isPanelOpen]);
 
-  // Handle click outside sidebar to close it (for mobile)
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      // Close sidebar when clicking on the overlay
-      if (isPanelOpen && overlayRef.current && overlayRef.current.contains(event.target as Node)) {
-        setIsPanelOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isPanelOpen]);
-
   // Check if user is new (first time visiting) - only for non-authenticated users
   useEffect(() => {
     if (!authState.loading && !authState.user) {
@@ -244,8 +228,9 @@ function App() {
     }
   };
 
-  const togglePanel = (e: React.MouseEvent) => {
-    // Prevent event propagation to stop the click from reaching the overlay
+  // New sidebar toggle function with proper event handling
+  const handleSidebarToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     setIsPanelOpen(!isPanelOpen);
   };
@@ -752,19 +737,17 @@ function App() {
           </div>
         )}
 
-        {/* Backdrop for Sidebar Overlay */}
+        {/* Sidebar Backdrop */}
         {isPanelOpen && (
           <div 
-            ref={overlayRef}
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
             onClick={() => setIsPanelOpen(false)}
             aria-hidden="true"
           />
         )}
 
-        {/* Sidebar Overlay */}
-        <aside 
-          ref={sidebarRef}
+        {/* Sidebar */}
+        <div 
           className={`
             fixed top-0 left-0 z-50 h-full w-80
             bg-gradient-to-br from-indigo-900/95 via-purple-900/95 to-pink-900/95
@@ -786,11 +769,15 @@ function App() {
           </button>
           
           {renderSidebarContent()}
-        </aside>
+        </div>
 
-        {/* Panel Toggle Button */}
+        {/* New Toggle Button - Completely separate from sidebar */}
         <button
-          onClick={(e) => togglePanel(e)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsPanelOpen(!isPanelOpen);
+          }}
           className="fixed top-6 left-6 z-30 p-3 bg-white/80 hover:bg-white/90 border border-white/20 hover:border-white/40 rounded-xl shadow-gentle hover:shadow-calm flex items-center justify-center text-therapy-gray-600 hover:text-soft-blue-600 hover:scale-105 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-soft-blue-300"
           title={isPanelOpen ? 'Close navigation panel (Ctrl+/)' : 'Open navigation panel (Ctrl+/)'}
           aria-label={isPanelOpen ? 'Close navigation panel' : 'Open navigation panel'}
