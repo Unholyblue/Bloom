@@ -244,7 +244,9 @@ function App() {
     }
   };
 
-  const togglePanel = () => {
+  const togglePanel = (e: React.MouseEvent) => {
+    // Prevent event propagation to stop the click from reaching the overlay
+    e.stopPropagation();
     setIsPanelOpen(!isPanelOpen);
   };
 
