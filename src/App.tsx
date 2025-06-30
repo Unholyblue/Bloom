@@ -757,8 +757,8 @@ function App() {
           <div 
             ref={overlayRef}
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
-            aria-hidden="true"
             onClick={() => setIsPanelOpen(false)}
+            aria-hidden="true"
           />
         )}
 
@@ -790,7 +790,7 @@ function App() {
 
         {/* Panel Toggle Button */}
         <button
-          onClick={togglePanel}
+          onClick={(e) => togglePanel(e)}
           className="fixed top-6 left-6 z-30 p-3 bg-white/80 hover:bg-white/90 border border-white/20 hover:border-white/40 rounded-xl shadow-gentle hover:shadow-calm flex items-center justify-center text-therapy-gray-600 hover:text-soft-blue-600 hover:scale-105 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-soft-blue-300"
           title={isPanelOpen ? 'Close navigation panel (Ctrl+/)' : 'Open navigation panel (Ctrl+/)'}
           aria-label={isPanelOpen ? 'Close navigation panel' : 'Open navigation panel'}
