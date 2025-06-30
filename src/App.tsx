@@ -228,13 +228,6 @@ function App() {
     }
   };
 
-  // New sidebar toggle function with proper event handling
-  const handleSidebarToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsPanelOpen(!isPanelOpen);
-  };
-
   const createNewSession = () => {
     setIsLoading(true);
     setLoadingMessage('Creating new conversation...');
@@ -770,25 +763,6 @@ function App() {
           
           {renderSidebarContent()}
         </div>
-
-        {/* New Toggle Button - Completely separate from sidebar */}
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsPanelOpen(!isPanelOpen);
-          }}
-          className="fixed top-6 left-6 z-30 p-3 bg-white/80 hover:bg-white/90 border border-white/20 hover:border-white/40 rounded-xl shadow-gentle hover:shadow-calm flex items-center justify-center text-therapy-gray-600 hover:text-soft-blue-600 hover:scale-105 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-soft-blue-300"
-          title={isPanelOpen ? 'Close navigation panel (Ctrl+/)' : 'Open navigation panel (Ctrl+/)'}
-          aria-label={isPanelOpen ? 'Close navigation panel' : 'Open navigation panel'}
-          aria-expanded={isPanelOpen}
-          aria-controls="navigation-sidebar"
-        >
-          <Menu size={20} />
-          <span className="sr-only">
-            {isPanelOpen ? 'Close' : 'Open'} navigation menu
-          </span>
-        </button>
 
         {/* Main Content Area */}
         <main 
